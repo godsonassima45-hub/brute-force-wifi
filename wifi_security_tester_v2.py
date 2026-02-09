@@ -168,48 +168,54 @@ class WiFiSecurityTester:
         print(f"{Colors.BOLD}{Colors.BLUE}ℹ️ {text}{Colors.ENDC}")
     
     def print_banner(self):
-        """Afficher la bannière style Kali Linux simple"""
+        """Afficher la bannière style Kali Linux large et centrée"""
         Colors.clear()
         
-        print(f"{Colors.CYAN}╔══════════════════════════════════════════════════════════════════════════════╗")
-        print(f"║ {Colors.BOLD}WiFi HACKER PRO v2.0 - Ultimate WiFi Penetration Tool{Colors.CYAN}           ║")
-        print(f"╚══════════════════════════════════════════════════════════════════════════════╝{Colors.RESET}")
-        print(f"{Colors.GREEN}[+] Real WiFi Brute Force{Colors.RESET}")
-        print(f"{Colors.GREEN}[+] Advanced Password Generation{Colors.RESET}")
-        print(f"{Colors.GREEN}[+] Network Discovery & Analysis{Colors.RESET}")
-        print(f"{Colors.YELLOW}[!] ETHICAL TESTING ONLY{Colors.RESET}")
+        print(f"{Colors.CYAN}{'='*80}")
+        print(f"{Colors.CYAN}{' '*20}{Colors.BOLD}WiFi HACKER PRO v2.0 - Ultimate WiFi Penetration Tool{Colors.CYAN}{' '*20}")
+        print(f"{Colors.CYAN}{'='*80}{Colors.RESET}")
+        print(f"{' '*25}{Colors.GREEN}[+] Real WiFi Brute Force{Colors.RESET}")
+        print(f"{' '*25}{Colors.GREEN}[+] Advanced Password Generation{Colors.RESET}")
+        print(f"{' '*25}{Colors.GREEN}[+] Network Discovery & Analysis{Colors.RESET}")
+        print(f"{' '*25}{Colors.YELLOW}[!] ETHICAL TESTING ONLY{Colors.RESET}")
         print()
     
     def display_menu(self):
-        """Afficher le menu principal - Style Kali Linux simple"""
+        """Afficher le menu principal - Style Kali Linux centré"""
         
-        print(f"{Colors.CYAN}=== WiFi Penetration Testing Tool - Main Menu ==={Colors.RESET}")
+        print(f"{Colors.CYAN}{'='*60}")
+        print(f"{Colors.CYAN}{' '*15}{Colors.BOLD}WiFi Penetration Testing Tool - Main Menu{Colors.CYAN}{' '*15}")
+        print(f"{Colors.CYAN}{'='*60}{Colors.RESET}")
         print()
-        print(f"{Colors.GREEN}1.{Colors.RESET} Scan WiFi Networks")
-        print(f"{Colors.GREEN}2.{Colors.RESET} Generate Wordlist")
-        print(f"{Colors.GREEN}3.{Colors.RESET} Manage Wordlists")
-        print(f"{Colors.GREEN}4.{Colors.RESET} Brute Force Attack")
-        print(f"{Colors.GREEN}5.{Colors.RESET} Simulation Mode")
-        print(f"{Colors.GREEN}6.{Colors.RESET} System Statistics")
-        print(f"{Colors.GREEN}7.{Colors.RESET} Security Recommendations")
-        print(f"{Colors.GREEN}0.{Colors.RESET} Exit")
+        print(f"{' '*20}{Colors.GREEN}1.{Colors.RESET} Scan WiFi Networks")
+        print(f"{' '*20}{Colors.GREEN}2.{Colors.RESET} Generate Wordlist")
+        print(f"{' '*20}{Colors.GREEN}3.{Colors.RESET} Manage Wordlists")
+        print(f"{' '*20}{Colors.GREEN}4.{Colors.RESET} Brute Force Attack")
+        print(f"{' '*20}{Colors.GREEN}5.{Colors.RESET} Simulation Mode")
+        print(f"{' '*20}{Colors.GREEN}6.{Colors.RESET} System Statistics")
+        print(f"{' '*20}{Colors.GREEN}7.{Colors.RESET} Security Recommendations")
+        print(f"{' '*20}{Colors.GREEN}0.{Colors.RESET} Exit")
         print()
         
-        # Status
+        # Status centré
         if self.interface:
             status = "Connected" if self.interface.status() == const.IFACE_CONNECTED else "Disconnected"
-            print(f"{Colors.BLUE}Interface: {self.interface.name()} | Status: {status}{Colors.RESET}")
+            interface_name = self.interface.name()
+            status_text = f"Interface: {interface_name} | Status: {status}"
+            print(f"{' '*((60-len(status_text))//2)}{Colors.BLUE}{status_text}{Colors.RESET}")
         else:
-            print(f"{Colors.YELLOW}Simulation mode only{Colors.RESET}")
+            print(f"{' '*20}{Colors.YELLOW}Simulation mode only{Colors.RESET}")
         
         if self.wordlist:
-            print(f"{Colors.BLUE}Wordlist: {len(self.wordlist):,} passwords loaded{Colors.RESET}")
+            wordlist_text = f"Wordlist: {len(self.wordlist):,} passwords loaded"
+            print(f"{' '*((60-len(wordlist_text))//2)}{Colors.BLUE}{wordlist_text}{Colors.RESET}")
         
         print()
-        print(f"{Colors.CYAN}Choice: {Colors.RESET}", end="", flush=True)
+        choice_text = "Choice: "
+        print(f"{' '*((60-len(choice_text))//2)}{Colors.CYAN}{choice_text}{Colors.RESET}", end="", flush=True)
     
     def scan_wifi_networks(self):
-        """Scanner les réseaux WiFi"""
+        """Scanner les réseaux WiFi - Amélioré sans doublons"""
         self.print_header("🔍 SCAN DES RÉSEAUX WIFI")
         
         if not self.interface:
@@ -217,21 +223,33 @@ class WiFiSecurityTester:
             return []
         
         try:
+            self.print_info("Scanning for networks...")
             self.interface.scan()
-            time.sleep(2)  # Attendre la fin du scan
+            time.sleep(3)  # Attendre la fin du scan
             
             networks = self.interface.scan_results()
             if not networks:
                 self.print_warning("Aucun réseau trouvé")
                 return []
             
-            self.print_success(f"{len(networks)} réseaux trouvés")
-            
-            # Affichage des réseaux
-            print(f"\n{Colors.BOLD}{'SSID':<20} {'BSSID':<18} {'Signal':<8} {'Sécurité':<15}{Colors.ENDC}")
-            print("-" * 70)
-            
+            # Éliminer les doublons basés sur BSSID
+            unique_networks = {}
             for network in networks:
+                bssid = network.bssid
+                ssid = network.ssid or "Caché"
+                if bssid not in unique_networks:
+                    unique_networks[bssid] = network
+            
+            unique_networks = list(unique_networks.values())
+            
+            self.print_success(f"{len(unique_networks)} réseaux uniques trouvés")
+            
+            # Affichage des réseaux centré
+            header = f"{'SSID':<20} {'BSSID':<18} {'Signal':<8} {'Sécurité':<15}"
+            print(f"\n{' '*((70-len(header))//2)}{Colors.BOLD}{header}{Colors.RESET}")
+            print(f"{' '*((70-len(header))//2)}{'-'*70}")
+            
+            for network in unique_networks:
                 ssid = network.ssid or "Caché"
                 bssid = network.bssid
                 signal = f"{network.signal} dBm"
@@ -248,9 +266,10 @@ class WiFiSecurityTester:
                     elif const.AKM_TYPE_WPAPSK in network.akm:
                         security = "WPA-PSK"
                 
-                print(f"{ssid:<20} {bssid:<18} {signal:<8} {security:<15}")
+                line = f"{ssid:<20} {bssid:<18} {signal:<8} {security:<15}"
+                print(f"{' '*((70-len(line))//2)}{line}")
             
-            return networks
+            return unique_networks
             
         except Exception as e:
             self.print_error(f"Erreur lors du scan: {e}")
