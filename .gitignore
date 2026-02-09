@@ -1,0 +1,135 @@
+# WiFi Penetration Testing Tool - .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Logs
+*.log
+logs/
+
+# Rapports et données sensibles
+reports/*.json
+wordlists/*.txt
+wordlists/*.lst
+*.log
+
+# Environnement virtuel
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Système d'exploitation
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Icônes et ressources (sauf wifi_icon.ico)
+*.ico
+!wifi_icon.ico
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+
+# Scripts de build (sauf build_safe_exe.py et build_working_exe_fixed.py)
+build_*.py
+!build_safe_exe.py
+!build_working_exe_fixed.py
+create_*.py
+
+# Documentation générée
+docs/_build/
+
+# Tests
+.coverage
+.pytest_cache/
+.tox/
+.nox/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath
+*.sage.py
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope
+.ropeproject
+
+# mkdocs
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre
+.pyre/
+
+# Exécutables compilés (sauf WiFiPenTestSafe.exe et WiFiPenTestWorking.exe)
+*.exe
+!WiFiPenTestSafe.exe
+!WiFiPenTest.exe
+!WiFiPenTestWorking.exe
+*.msi
+*.dmg
+*.app
