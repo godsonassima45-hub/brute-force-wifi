@@ -168,82 +168,45 @@ class WiFiSecurityTester:
         print(f"{Colors.BOLD}{Colors.BLUE}ℹ️ {text}{Colors.ENDC}")
     
     def print_banner(self):
-        """Afficher la bannière animée ultra-rapide"""
+        """Afficher la bannière style Kali Linux simple"""
         Colors.clear()
         
-        banner = f"""
-{Colors.terminal_text()}┌─────────────────────────────────────────────────────────────────────────────────┐
-│                                                                                 │
-│  {Colors.BOLD}██╗██╗   ██╗██╗ ██████╗ ██████╗ ██████╗ ██████╗ ███████╗███████╗███████╗    ██╗{Colors.terminal_text()}  │
-│  ██║██║   ██║██║██╔════╝██╔═══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝    ██║{Colors.terminal_text()}  │  
-│  ██║██║   ██║██║██║     ██║   ██║██████╔╝██║  ██║█████╗  █████╗  █████╗      ██║{Colors.terminal_text()}  │
-│  ██║╚██╗ ██╔╝██║██║     ██║   ██║██╔══██╗██║  ██║██╔══╝  ██╔══╝  ██╔══╝      ╚═╝{Colors.terminal_text()}  │
-│  ██║ ╚████╔╝ ██║╚██████╗╚██████╔╝██║  ██║██████╔╝███████╗███████╗███████╗    ██╗{Colors.terminal_text()}  │
-│  ╚═╝  ╚═══╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝╚══════╝    ╚═╝{Colors.terminal_text()}  │
-│                                                                                 │
-│  {Colors.BOLD}{Colors.CYAN}WiFi PENETRATION TESTING TOOL v2.0 - KALI LINUX EDITION{Colors.terminal_text()}                      │
-│                                                                                 │
-│  {Colors.success}[+]{Colors.terminal_text()} Real WiFi Brute Force                                            │
-│  {Colors.success}[+]{Colors.terminal_text()} Advanced Password Generation                                     │
-│  {Colors.success}[+]{Colors.terminal_text()} Network Discovery & Analysis                                    │
-│  {Colors.warning}[!]{Colors.terminal_text()} ETHICAL TESTING ONLY                                            │
-│                                                                                 │
-└─────────────────────────────────────────────────────────────────────────────────┘
-{Colors.reset()}
-{Colors.kali_prompt()}{Colors.terminal_text()}Initializing WiFi Penetration Framework...{Colors.reset()}
-{Colors.kali_prompt()}{Colors.terminal_text()}Loading security modules...{Colors.reset()}
-{Colors.kali_prompt()}{Colors.success()}System ready{Colors.reset()}
-"""
-        print(banner)
+        print(f"{Colors.CYAN}╔══════════════════════════════════════════════════════════════════════════════╗")
+        print(f"║ {Colors.BOLD}WiFi Penetration Testing Tool v2.0 - Kali Linux Edition{Colors.CYAN}               ║")
+        print(f"╚══════════════════════════════════════════════════════════════════════════════╝{Colors.RESET}")
+        print(f"{Colors.GREEN}[+] Real WiFi Brute Force{Colors.RESET}")
+        print(f"{Colors.GREEN}[+] Advanced Password Generation{Colors.RESET}")
+        print(f"{Colors.GREEN}[+] Network Discovery & Analysis{Colors.RESET}")
+        print(f"{Colors.YELLOW}[!] ETHICAL TESTING ONLY{Colors.RESET}")
+        print()
     
     def display_menu(self):
-        """Afficher le menu principal - Style Kali Linux Terminal"""
+        """Afficher le menu principal - Style Kali Linux simple"""
         
-        # Terminal-style header
-        print(f"{Colors.terminal_text()}┌─────────────────────────────────────────────────────────────────┐")
-        print(f"│ {Colors.BOLD}{Colors.CYAN}WiFi Penetration Testing Tool - Main Menu{Colors.terminal_text()}               │")
-        print(f"└─────────────────────────────────────────────────────────────────┘{Colors.reset()}")
+        print(f"{Colors.CYAN}=== WiFi Penetration Testing Tool - Main Menu ==={Colors.RESET}")
+        print()
+        print(f"{Colors.GREEN}1.{Colors.RESET} Scan WiFi Networks")
+        print(f"{Colors.GREEN}2.{Colors.RESET} Generate Wordlist")
+        print(f"{Colors.GREEN}3.{Colors.RESET} Manage Wordlists")
+        print(f"{Colors.GREEN}4.{Colors.RESET} Brute Force Attack")
+        print(f"{Colors.GREEN}5.{Colors.RESET} Simulation Mode")
+        print(f"{Colors.GREEN}6.{Colors.RESET} System Statistics")
+        print(f"{Colors.GREEN}7.{Colors.RESET} Security Recommendations")
+        print(f"{Colors.GREEN}0.{Colors.RESET} Exit")
         print()
         
-        # Terminal-style menu options
-        menu_items = [
-            ("1", "scan", "Scan WiFi Networks", "Discover SSID/MAC/IP/Security", Colors.GREEN),
-            ("2", "gen", "Generate Wordlist", "Create 500k+ optimized passwords", Colors.GREEN),
-            ("3", "wordlist", "Manage Wordlists", "Load/Save/List custom wordlists", Colors.YELLOW),
-            ("4", "brute", "Brute Force Attack", "Ultra-fast 20+ pwd/sec attack", Colors.RED),
-            ("5", "sim", "Simulation Mode", "Test without real connection", Colors.BLUE),
-            ("6", "stats", "System Statistics", "CPU/Memory/Network analysis", Colors.CYAN),
-            ("7", "security", "Security Recommendations", "Expert cybersecurity tips", Colors.MAGENTA),
-            ("0", "exit", "Exit Application", "Clean shutdown and save", Colors.RED)
-        ]
-        
-        for num, cmd, title, desc, color in menu_items:
-            print(f"{Colors.kali_prompt()}{Colors.BOLD}{num}{Colors.reset()} {color}{cmd}{Colors.reset()} - {Colors.BOLD}{title}{Colors.reset()}")
-            print(f"{Colors.kali_prompt()}    {Colors.DIM}{desc}{Colors.reset()}")
-            print()
-        
-        # Status line
+        # Status
         if self.interface:
             status = "Connected" if self.interface.status() == const.IFACE_CONNECTED else "Disconnected"
-            print(f"{Colors.kali_prompt()}{Colors.info()}Interface: {self.interface.name()} | Status: {status}{Colors.reset()}")
+            print(f"{Colors.BLUE}Interface: {self.interface.name()} | Status: {status}{Colors.RESET}")
         else:
-            print(f"{Colors.kali_prompt()}{Colors.warning()}Simulation mode only - No WiFi interface{Colors.reset()}")
+            print(f"{Colors.YELLOW}Simulation mode only{Colors.RESET}")
         
-        print(f"{Colors.kali_prompt()}{Colors.terminal_text()}Enter choice: {Colors.reset()}", end="", flush=True)
-        
-        # Statut système en bas
-        if self.interface:
-            status = "🟢 CONNECTÉ" if self.interface.status() == const.IFACE_CONNECTED else "🔴 DÉCONNECTÉ"
-            interface_name = self.interface.name() or "Inconnue"
-            print(f"{Colors.BG_GREEN}{Colors.BLACK} 📡 Interface: {interface_name} | Statut: {status} {Colors.ENDC}")
-        else:
-            print(f"{Colors.BG_YELLOW}{Colors.BLACK} ⚠️  Mode simulation uniquement - Bibliothèques WiFi non disponibles {Colors.ENDC}")
-        
-        # Info wordlist
         if self.wordlist:
-            print(f"{Colors.BG_BLUE}{Colors.WHITE} 📋 Wordlist chargée: {len(self.wordlist):,} mots de passe {Colors.ENDC}")
-        else:
-            print(f"{Colors.BG_GRAY}{Colors.WHITE} 📋 Aucune wordlist chargée {Colors.ENDC}")
+            print(f"{Colors.BLUE}Wordlist: {len(self.wordlist):,} passwords loaded{Colors.RESET}")
+        
+        print()
+        print(f"{Colors.CYAN}Choice: {Colors.RESET}", end="", flush=True)
     
     def scan_wifi_networks(self):
         """Scanner les réseaux WiFi"""
@@ -265,14 +228,13 @@ class WiFiSecurityTester:
             self.print_success(f"{len(networks)} réseaux trouvés")
             
             # Affichage des réseaux
-            print(f"\n{Colors.BOLD}{'SSID':<20} {'BSSID':<18} {'Signal':<8} {'Canal':<8} {'Sécurité':<15}{Colors.ENDC}")
-            print("-" * 80)
+            print(f"\n{Colors.BOLD}{'SSID':<20} {'BSSID':<18} {'Signal':<8} {'Sécurité':<15}{Colors.ENDC}")
+            print("-" * 70)
             
             for network in networks:
                 ssid = network.ssid or "Caché"
                 bssid = network.bssid
                 signal = f"{network.signal} dBm"
-                canal = str(network.channel)
                 
                 # Détection du type de sécurité
                 security = "Ouvert"
@@ -286,7 +248,7 @@ class WiFiSecurityTester:
                     elif const.AKM_TYPE_WPAPSK in network.akm:
                         security = "WPA-PSK"
                 
-                print(f"{ssid:<20} {bssid:<18} {signal:<8} {canal:<8} {security:<15}")
+                print(f"{ssid:<20} {bssid:<18} {signal:<8} {security:<15}")
             
             return networks
             
