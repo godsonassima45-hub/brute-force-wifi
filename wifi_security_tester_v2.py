@@ -172,7 +172,7 @@ class WiFiSecurityTester:
         Colors.clear()
         
         print(f"{Colors.CYAN}╔══════════════════════════════════════════════════════════════════════════════╗")
-        print(f"║ {Colors.BOLD}WiFi Penetration Testing Tool v2.0 - Kali Linux Edition{Colors.CYAN}               ║")
+        print(f"║ {Colors.BOLD}WiFi HACKER PRO v2.0 - Ultimate WiFi Penetration Tool{Colors.CYAN}           ║")
         print(f"╚══════════════════════════════════════════════════════════════════════════════╝{Colors.RESET}")
         print(f"{Colors.GREEN}[+] Real WiFi Brute Force{Colors.RESET}")
         print(f"{Colors.GREEN}[+] Advanced Password Generation{Colors.RESET}")
