@@ -711,7 +711,8 @@ class WiFiSecurityTester:
                 return True
             elif choice == '2':
                 filepath = input(f"{' '*20}Wordlist file path (.txt): ").strip()
-                if self.load_custom_wordlist(filepath):
+                # Utiliser la fonction load_custom_wordlist_with_path
+                if self.load_custom_wordlist_with_path(filepath):
                     return True
                 else:
                     self.print_error("Failed to load wordlist. Try again.")
@@ -780,6 +781,50 @@ class WiFiSecurityTester:
                 break
             else:
                 self.print_error("Option invalide!")
+    
+    def load_custom_wordlist_with_path(self, file_path):
+        """Charger une wordlist personnalisée avec un chemin spécifique"""
+        file_path = file_path.strip()
+        
+        # Vérifier si le chemin est valide
+        if not file_path:
+            self.print_error("Chemin vide!")
+            return False
+        
+        if not os.path.exists(file_path):
+            self.print_error(f"Fichier non trouvé: {file_path}")
+            return False
+        
+        # Vérifier que c'est bien un fichier .txt
+        if not file_path.lower().endswith('.txt'):
+            self.print_error("Le fichier doit être au format .txt!")
+            return False
+        
+        try:
+            self.print_info(f"Chargement de la wordlist: {file_path}")
+            
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                passwords = []
+                for line_num, line in enumerate(f, 1):
+                    password = line.strip()
+                    if password and len(password) >= 8:  # Minimum 8 caractères
+                        passwords.append(password)
+                    elif line_num % 1000000 == 0:  # Progression pour gros fichiers
+                        self.print_info(f"Chargement... {line_num:,} lignes traitées")
+            
+            self.wordlist = passwords
+            self.print_success(f"Wordlist chargée: {len(passwords):,} mots de passe")
+            return True
+            
+        except FileNotFoundError:
+            self.print_error(f"Fichier non trouvé: {file_path}")
+            return False
+        except PermissionError:
+            self.print_error(f"Permission refusée: {file_path}")
+            return False
+        except Exception as e:
+            self.print_error(f"Erreur lors du chargement: {e}")
+            return False
     
     def load_custom_wordlist(self):
         """Charger une wordlist personnalisée"""
