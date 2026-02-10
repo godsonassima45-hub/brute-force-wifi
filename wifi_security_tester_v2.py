@@ -754,7 +754,7 @@ class WiFiSecurityTester:
             self.display_menu()
             
             try:
-                choice = input(f"\n{Colors.BOLD}🎯 Choisissez une option (0-7): {Colors.ENDC}")
+                choice = input(f"\n{Colors.BOLD}🎯 Choisissez une option (0-4): {Colors.ENDC}")
                 
                 if choice == '1':
                     self.scan_wifi_networks()
