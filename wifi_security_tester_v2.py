@@ -692,29 +692,6 @@ class WiFiSecurityTester:
         
         print(f"\n{Colors.WARNING}⚠️ Ces recommandations sont pour protéger VOS propres réseaux{Colors.ENDC}")
     
-    def load_custom_wordlist(self, filepath):
-        """Charger une wordlist personnalisée depuis un fichier .txt"""
-        try:
-            if not os.path.exists(filepath):
-                self.print_error(f"Fichier introuvable: {filepath}")
-                return False
-            
-            self.print_info(f"Chargement de la wordlist: {filepath}")
-            self.wordlist = []
-            
-            with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
-                for line in f:
-                    password = line.strip()
-                    if password and len(password) >= 8:  # Minimum 8 caractères
-                        self.wordlist.append(password)
-            
-            self.print_success(f"Wordlist chargée: {len(self.wordlist):,} mots de passe")
-            return True
-            
-        except Exception as e:
-            self.print_error(f"Erreur lors du chargement: {e}")
-            return False
-    
     def ask_wordlist_choice(self):
         """Demander le choix de wordlist pour le brute force"""
         print(f"\n{Colors.CYAN}{'='*60}")
@@ -806,17 +783,41 @@ class WiFiSecurityTester:
     
     def load_custom_wordlist(self):
         """Charger une wordlist personnalisée"""
-        file_path = input("Chemin du fichier wordlist: ")
+        file_path = input("Chemin du fichier wordlist: ").strip()
+        
+        # Vérifier si le chemin est valide
+        if not file_path:
+            self.print_error("Chemin vide!")
+            return
+        
+        if not os.path.exists(file_path):
+            self.print_error(f"Fichier non trouvé: {file_path}")
+            return
+        
+        # Vérifier que c'est bien un fichier .txt
+        if not file_path.lower().endswith('.txt'):
+            self.print_error("Le fichier doit être au format .txt!")
+            return
         
         try:
+            self.print_info(f"Chargement de la wordlist: {file_path}")
+            
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                passwords = [line.strip() for line in f if line.strip()]
+                passwords = []
+                for line_num, line in enumerate(f, 1):
+                    password = line.strip()
+                    if password and len(password) >= 8:  # Minimum 8 caractères
+                        passwords.append(password)
+                    elif line_num % 1000000 == 0:  # Progression pour gros fichiers
+                        self.print_info(f"Chargement... {line_num:,} lignes traitées")
             
             self.wordlist = passwords
-            self.print_success(f"Wordlist chargée: {len(passwords)} mots de passe")
+            self.print_success(f"Wordlist chargée: {len(passwords):,} mots de passe")
             
         except FileNotFoundError:
-            self.print_error("Fichier non trouvé!")
+            self.print_error(f"Fichier non trouvé: {file_path}")
+        except PermissionError:
+            self.print_error(f"Permission refusée: {file_path}")
         except Exception as e:
             self.print_error(f"Erreur lors du chargement: {e}")
     
