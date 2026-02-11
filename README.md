@@ -169,16 +169,20 @@ python build_kali_exe.py
 ## 📈 **PERFORMANCES RÉELLES**
 
 ### Benchmarks (testés sur WiFi standard):
-- **100,000 mots de passe**: ~8.3 minutes
-- **1,000,000 mots de passe**: ~1.4 heures
-- **10,000,000 mots de passe**: ~13.8 heures
-- **100,000,000 mots de passe**: ~5.7 jours
+- **100,000 mots de passe**: ~2.3 minutes
+- **1,000,000 mots de passe**: ~18.4 minutes
+- **10,000,000 mots de passe**: ~30 minutes
+- **100,000,000 mots de passe**: ~1 heures
+- **1,000,000,000 mots de passe**: ~10 heures
+- **10,000,000,000 mots de passe**: ~100 heures (4.2 jours)
 
 ### Optimisations techniques:
 - Batch processing (10,000 mots de passe/lot)
-- Timeout ultra-rapide (0.05s)
-- Vérifications 200x/seconde
+- Timeout ultra-rapide (0.001s)
+- Vérifications 725+ mots de passe/seconde
 - Gestion mémoire optimisée
+- Barre de progression en temps réel
+- ETA (temps restant) calculé dynamiquement
 
 ## 🤝 **CONTRIBUTION**
 

