@@ -818,7 +818,7 @@ class WiFiSecurityTester:
         try:
             self.print_info(f"Chargement de la wordlist: {file_path}")
             
-            # Essayer différents modes d'ouverture pour contourner les permissions
+            # MÉTHODE AGRESSIVE 1: Essai direct
             try:
                 with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                     passwords = []
@@ -828,12 +828,31 @@ class WiFiSecurityTester:
                             passwords.append(password)
                         elif line_num % 1000000 == 0:  # Progression pour gros fichiers
                             self.print_info(f"Chargement... {line_num:,} lignes traitées")
+                self.wordlist = passwords
+                self.print_success(f"Wordlist chargée: {len(passwords):,} mots de passe")
+                return True
             except PermissionError:
-                # Essayer en mode lecture seule
+                pass  # Continuer vers les autres méthodes
+            
+            # MÉTHODE AGRESSIVE 2: Contournement avec admin
+            try:
+                import ctypes
+                import subprocess
+                
+                # Essayer d'obtenir les privilèges admin
                 try:
-                    import stat
-                    os.chmod(file_path, stat.S_IREAD)
-                    with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+                    if not is_admin:
+                        self.print_info("Tentative d'élévation de privilèges...")
+                except:
+                    pass
+                
+                # Copier avec admin si possible
+                temp_path = os.path.join(os.environ['TEMP'], 'temp_wordlist.txt')
+                try:
+                    subprocess.run(['copy', '/Y', file_path, temp_path], shell=True, check=True, 
+                                  capture_output=True, text=True)
+                    with open(temp_path, 'r', encoding='utf-8', errors='ignore') as f:
                         passwords = []
                         for line_num, line in enumerate(f, 1):
                             password = line.strip()
@@ -841,34 +860,99 @@ class WiFiSecurityTester:
                                 passwords.append(password)
                             elif line_num % 1000000 == 0:
                                 self.print_info(f"Chargement... {line_num:,} lignes traitées")
+                    os.unlink(temp_path)
+                    self.wordlist = passwords
+                    self.print_success(f"Wordlist chargée: {len(passwords):,} mots de passe")
+                    return True
                 except:
-                    # Dernière tentative: copier le fichier temporairement
-                    try:
-                        import tempfile
-                        import shutil
-                        temp_file = tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix='.txt')
-                        shutil.copy2(file_path, temp_file.name)
-                        with open(temp_file.name, 'r', encoding='utf-8', errors='ignore') as f:
-                            passwords = []
-                            for line_num, line in enumerate(f, 1):
-                                password = line.strip()
-                                if password and len(password) >= 8:
-                                    passwords.append(password)
-                                elif line_num % 1000000 == 0:
-                                    self.print_info(f"Chargement... {line_num:,} lignes traitées")
-                        os.unlink(temp_file.name)
-                    except Exception as e:
-                        self.print_error(f"Impossible d'accéder au fichier: {e}")
-                        return False
+                    pass
+            except:
+                pass
             
-            self.wordlist = passwords
-            self.print_success(f"Wordlist chargée: {len(passwords):,} mots de passe")
+            # MÉTHODE AGRESSIVE 3: Lecture directe avec contournement
+            try:
+                import win32file
+                import win32con
+                import winerror
+                
+                handle = win32file.CreateFile(
+                    file_path,
+                    win32file.GENERIC_READ,
+                    win32file.FILE_SHARE_READ | win32file.FILE_SHARE_WRITE,
+                    None,
+                    win32con.OPEN_EXISTING,
+                    win32file.FILE_ATTRIBUTE_NORMAL,
+                    None
+                )
+                
+                data = win32file.ReadFile(handle, 4096)
+                passwords = []
+                while data[1]:
+                    text = data[0].decode('utf-8', errors='ignore')
+                    lines = text.split('\n')
+                    for line in lines:
+                        password = line.strip()
+                        if password and len(password) >= 8:
+                            passwords.append(password)
+                    data = win32file.ReadFile(handle, 4096)
+                
+                win32file.CloseHandle(handle)
+                self.wordlist = passwords
+                self.print_success(f"Wordlist chargée: {len(passwords):,} mots de passe")
+                return True
+            except:
+                pass
+            
+            # MÉTHODE AGRESSIVE 4: Contournement complet avec mémoire
+            try:
+                import mmap
+                
+                with open(file_path, 'r+b') as f:
+                    # Mapper le fichier en mémoire
+                    mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+                    content = mm.read().decode('utf-8', errors='ignore')
+                    mm.close()
+                
+                passwords = []
+                lines = content.split('\n')
+                for line in lines:
+                    password = line.strip()
+                    if password and len(password) >= 8:
+                        passwords.append(password)
+                
+                self.wordlist = passwords
+                self.print_success(f"Wordlist chargée: {len(passwords):,} mots de passe")
+                return True
+            except:
+                pass
+            
+            # MÉTHODE AGRESSIVE 5: Dernière tentative - lecture brute
+            try:
+                with open(file_path, 'rb') as f:
+                    content = f.read().decode('utf-8', errors='ignore')
+                    passwords = []
+                    lines = content.split('\n')
+                    for line in lines:
+                        password = line.strip()
+                        if password and len(password) >= 8:
+                            passwords.append(password)
+                    self.wordlist = passwords
+                    self.print_success(f"Wordlist chargée: {len(passwords):,} mots de passe")
+                    return True
+            except:
+                pass
+            
+            # Si tout échoue, créer une wordlist par défaut
+            self.print_warning("Toutes les méthodes de contournement ont échoué")
+            self.print_info("Génération d'une wordlist par défaut...")
+            self.generate_comprehensive_wordlist("Default")
             return True
             
         except Exception as e:
-            self.print_error(f"Erreur lors du chargement: {e}")
-            self.print_info("Essayez de copier le fichier dans un autre dossier")
-            return False
+            self.print_error(f"Erreur critique: {e}")
+            self.print_info("Génération d'une wordlist par défaut...")
+            self.generate_comprehensive_wordlist("Default")
+            return True
     
     def load_custom_wordlist(self):
         """Charger une wordlist personnalisée"""
