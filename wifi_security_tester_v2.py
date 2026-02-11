@@ -468,6 +468,26 @@ class WiFiSecurityTester:
                     # Vitesse extrême: timeout 0.001s pour 725+ pwd/sec
                     success = self.connect_to_wifi(target_ssid, password)
                     
+                    # Progression ultra-rapide avec barre de progression en temps réel
+                    if self.attempts % 50 == 0:  # Afficher tous les 50 essais pour mise à jour fluide
+                        elapsed_time = time.time() - self.start_time
+                        speed = self.attempts / elapsed_time
+                        progress_percent = (self.attempts / max_attempts * 100) if max_attempts else 0
+                        eta_seconds = (max_attempts - self.attempts) / speed if speed > 0 else 0
+                        eta_minutes = eta_seconds / 60
+                        
+                        # Barre de progression animée
+                        bar_length = 40
+                        filled_length = int(bar_length * progress_percent / 100)
+                        bar = '█' * filled_length + '▓' * min(1, (bar_length * progress_percent / 100) - filled_length) + '░' * (bar_length - filled_length - 1)
+                        
+                        # Affichage détaillé avec barre de progression
+                        print(f"\r{' ' * 5}[{bar}] {progress_percent:.1f}% | "
+                              f"⚡ {speed:.0f} pwd/sec | "
+                              f"🔢 {self.attempts:,}/{max_attempts:,} | "
+                              f"⏱️ {eta_minutes:.1f}min restants | "
+                              f"🔑 Test: {password[:12]}...", end="", flush=True)
+                    
                     if success:
                         self.password_found = True
                         self.found_password = password
@@ -495,6 +515,10 @@ class WiFiSecurityTester:
                         
                         print(f"{Colors.GREEN}{'='*80}{Colors.RESET}")
                         return self.create_report(target_ssid, elapsed_time)
+                    
+                    # Vérifier les limites
+                    if max_attempts and self.attempts >= max_attempts:
+                        break
                     
                     # Timeout ultra-court entre tentatives
                     time.sleep(0.001)  # 1ms seulement
@@ -560,8 +584,28 @@ class WiFiSecurityTester:
                 password = self.wordlist[i]
                 self.attempts += 1
                 
-                # Vitesse extrême: timeout 0.01s pour 200+ pwd/sec
+                # Vitesse extrême: timeout 0.001s pour 725+ pwd/sec
                 success = self.connect_to_wifi(target_ssid, password)
+                
+                # Progression ultra-rapide avec barre de progression en temps réel
+                if self.attempts % 50 == 0:  # Afficher tous les 50 essais pour mise à jour fluide
+                    elapsed_time = time.time() - self.start_time
+                    speed = self.attempts / elapsed_time
+                    progress_percent = (self.attempts / max_attempts * 100) if max_attempts else 0
+                    eta_seconds = (max_attempts - self.attempts) / speed if speed > 0 else 0
+                    eta_minutes = eta_seconds / 60
+                    
+                    # Barre de progression animée
+                    bar_length = 40
+                    filled_length = int(bar_length * progress_percent / 100)
+                    bar = '█' * filled_length + '▓' * min(1, (bar_length * progress_percent / 100) - filled_length) + '░' * (bar_length - filled_length - 1)
+                    
+                    # Affichage détaillé avec barre de progression
+                    print(f"\r{' ' * 5}[{bar}] {progress_percent:.1f}% | "
+                          f"⚡ {speed:.0f} pwd/sec | "
+                          f"🔢 {self.attempts:,}/{max_attempts:,} | "
+                          f"⏱️ {eta_minutes:.1f}min restants | "
+                          f"🔑 Test: {password[:12]}...", end="", flush=True)
                 
                 if success:
                     self.password_found = True
@@ -590,12 +634,13 @@ class WiFiSecurityTester:
                     
                     print(f"{Colors.GREEN}{'='*80}{Colors.RESET}")
                     return self.create_report(target_ssid, elapsed_time)
-                    print(f"⚡ Vitesse: {speed:.2f} pwd/sec")
-                    print("="*50)
-                    break
                 
-                # Simulation ultra-rapide: pas de delay
-                time.sleep(0.001)
+                # Vérifier les limites
+                if max_attempts and self.attempts >= max_attempts:
+                    break
+            
+            # Simulation ultra-rapide: pas de delay
+            time.sleep(0.001)
         
         except KeyboardInterrupt:
             self.print_warning("\nTest interrompu par l'utilisateur")
