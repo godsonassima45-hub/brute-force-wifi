@@ -824,7 +824,7 @@ class WiFiSecurityTester:
                     passwords = []
                     for line_num, line in enumerate(f, 1):
                         password = line.strip()
-                        if password and len(password) >= 8:  # Minimum 8 caractères
+                        if password:  # Charger TOUS les mots de passe, même courts
                             passwords.append(password)
                         elif line_num % 1000000 == 0:  # Progression pour gros fichiers
                             self.print_info(f"Chargement... {line_num:,} lignes traitées")
@@ -856,7 +856,7 @@ class WiFiSecurityTester:
                         passwords = []
                         for line_num, line in enumerate(f, 1):
                             password = line.strip()
-                            if password and len(password) >= 8:
+                            if password:  # Charger TOUS les mots de passe
                                 passwords.append(password)
                             elif line_num % 1000000 == 0:
                                 self.print_info(f"Chargement... {line_num:,} lignes traitées")
@@ -892,7 +892,7 @@ class WiFiSecurityTester:
                     lines = text.split('\n')
                     for line in lines:
                         password = line.strip()
-                        if password and len(password) >= 8:
+                        if password:  # Charger TOUS les mots de passe
                             passwords.append(password)
                     data = win32file.ReadFile(handle, 4096)
                 
@@ -917,7 +917,7 @@ class WiFiSecurityTester:
                 lines = content.split('\n')
                 for line in lines:
                     password = line.strip()
-                    if password and len(password) >= 8:
+                    if password:  # Charger TOUS les mots de passe
                         passwords.append(password)
                 
                 self.wordlist = passwords
@@ -934,7 +934,7 @@ class WiFiSecurityTester:
                     lines = content.split('\n')
                     for line in lines:
                         password = line.strip()
-                        if password and len(password) >= 8:
+                        if password:  # Charger TOUS les mots de passe
                             passwords.append(password)
                     self.wordlist = passwords
                     self.print_success(f"Wordlist chargée: {len(passwords):,} mots de passe")
