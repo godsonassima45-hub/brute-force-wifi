@@ -711,17 +711,26 @@ class WiFiSecurityTester:
                 return True
             elif choice == '2':
                 filepath = input(f"{' '*20}Wordlist file path (.txt): ").strip()
-                # Utiliser la fonction load_custom_wordlist_with_path
                 if self.load_custom_wordlist_with_path(filepath):
                     return True
                 else:
-                    self.print_error("Failed to load wordlist. Try again.")
+                    self.print_warning("Échec du chargement. Options:")
+                    print(f"{' '*25}1. Réessayer avec un autre chemin")
+                    print(f"{' '*25}2. Utiliser une wordlist générée")
+                    retry = input(f"{' '*20}Réessayer? (y/N): ").lower()
+                    if retry != 'y':
+                        # Générer une wordlist par défaut si échec
+                        self.print_info("Génération d'une wordlist par défaut...")
+                        self.generate_comprehensive_wordlist("Default")
+                        return True
             elif choice == '3':
                 if self.wordlist:
                     self.print_info(f"Using existing wordlist: {len(self.wordlist):,} passwords")
                     return True
                 else:
-                    self.print_warning("No existing wordlist. Please generate or load one first.")
+                    self.print_warning("No existing wordlist. Generating default...")
+                    self.generate_comprehensive_wordlist("Default")
+                    return True
             else:
                 self.print_error("Invalid choice. Please select 1, 2, or 3.")
     
@@ -791,8 +800,14 @@ class WiFiSecurityTester:
             self.print_error("Chemin vide!")
             return False
         
+        # Corriger les chemins avec doubles noms de fichiers
+        if '\\rockyou.txt\\rockyou.txt' in file_path:
+            file_path = file_path.replace('\\rockyou.txt\\rockyou.txt', '\\rockyou.txt')
+            self.print_info(f"Chemin corrigé: {file_path}")
+        
         if not os.path.exists(file_path):
             self.print_error(f"Fichier non trouvé: {file_path}")
+            self.print_info("Vérifiez que le chemin est correct et que le fichier existe")
             return False
         
         # Vérifier que c'est bien un fichier .txt
@@ -803,27 +818,56 @@ class WiFiSecurityTester:
         try:
             self.print_info(f"Chargement de la wordlist: {file_path}")
             
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                passwords = []
-                for line_num, line in enumerate(f, 1):
-                    password = line.strip()
-                    if password and len(password) >= 8:  # Minimum 8 caractères
-                        passwords.append(password)
-                    elif line_num % 1000000 == 0:  # Progression pour gros fichiers
-                        self.print_info(f"Chargement... {line_num:,} lignes traitées")
+            # Essayer différents modes d'ouverture pour contourner les permissions
+            try:
+                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    passwords = []
+                    for line_num, line in enumerate(f, 1):
+                        password = line.strip()
+                        if password and len(password) >= 8:  # Minimum 8 caractères
+                            passwords.append(password)
+                        elif line_num % 1000000 == 0:  # Progression pour gros fichiers
+                            self.print_info(f"Chargement... {line_num:,} lignes traitées")
+            except PermissionError:
+                # Essayer en mode lecture seule
+                try:
+                    import stat
+                    os.chmod(file_path, stat.S_IREAD)
+                    with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                        passwords = []
+                        for line_num, line in enumerate(f, 1):
+                            password = line.strip()
+                            if password and len(password) >= 8:
+                                passwords.append(password)
+                            elif line_num % 1000000 == 0:
+                                self.print_info(f"Chargement... {line_num:,} lignes traitées")
+                except:
+                    # Dernière tentative: copier le fichier temporairement
+                    try:
+                        import tempfile
+                        import shutil
+                        temp_file = tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix='.txt')
+                        shutil.copy2(file_path, temp_file.name)
+                        with open(temp_file.name, 'r', encoding='utf-8', errors='ignore') as f:
+                            passwords = []
+                            for line_num, line in enumerate(f, 1):
+                                password = line.strip()
+                                if password and len(password) >= 8:
+                                    passwords.append(password)
+                                elif line_num % 1000000 == 0:
+                                    self.print_info(f"Chargement... {line_num:,} lignes traitées")
+                        os.unlink(temp_file.name)
+                    except Exception as e:
+                        self.print_error(f"Impossible d'accéder au fichier: {e}")
+                        return False
             
             self.wordlist = passwords
             self.print_success(f"Wordlist chargée: {len(passwords):,} mots de passe")
             return True
             
-        except FileNotFoundError:
-            self.print_error(f"Fichier non trouvé: {file_path}")
-            return False
-        except PermissionError:
-            self.print_error(f"Permission refusée: {file_path}")
-            return False
         except Exception as e:
             self.print_error(f"Erreur lors du chargement: {e}")
+            self.print_info("Essayez de copier le fichier dans un autre dossier")
             return False
     
     def load_custom_wordlist(self):
